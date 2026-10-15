@@ -32,7 +32,7 @@ const transport = nodemailer.createTransport({
 });
 
 async function main() {
-    await mongoose.connect('mongodb+srv://<db_username>:<db_password>@cluster0.bde51ir.mongodb.net/bookstore');
+    await mongoose.connect('mongodb+srv://Harshita:jTacD3GbaFrlajcf@cluster0.bde51ir.mongodb.net/bookstore');
 }
 main()
 .then(() => {console.log('Connected to MongoDB')})
