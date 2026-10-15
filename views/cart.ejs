@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Cart | The Book Store</title>
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body class="min-h-screen bg-[#F7F5EF] font-['DM_Sans'] text-[#34443D]">
+<%- include('includes/nav.ejs') %>
+<main class="mx-auto max-w-6xl px-5 py-12 sm:px-8 lg:py-16">
+<div class="mb-10">
+<p class="text-sm font-semibold uppercase tracking-[0.18em] text-[#788A82]">Your Collection</p>
+<h1 class="mt-3 text-4xl font-bold leading-tight text-[#34443D] sm:text-5xl">My Shopping Cart</h1>
+<p class="mt-4 max-w-xl text-base leading-7 text-[#6C766F]">Your next favourite read is waiting for you. Review your selected books before checkout.</p>
+</div>
+<%
+const cartItems=typeof cart!=='undefined'&&Array.isArray(cart)?cart:[];
+const totalAmount=cartItems.reduce((sum,item)=>sum+(Number(item.price)||0)*(Number(item.quantity)||1),0);
+const totalBooks=cartItems.reduce((sum,item)=>sum+(Number(item.quantity)||1),0);
+%>
+<% if(cartItems.length===0){ %>
+<section class="rounded-2xl border border-[#E1E5DE] bg-white px-6 py-16 text-center shadow-sm sm:py-20">
+<div class="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-[#E8EDE8] text-3xl text-[#788A82]"><i class="fa-solid fa-bag-shopping"></i></div>
+<h2 class="mt-6 text-2xl font-bold text-[#34443D] sm:text-3xl">Your Cart is Empty</h2>
+<p class="mx-auto mt-3 max-w-md text-sm leading-7 text-[#6C766F]">You haven't added any books yet. Explore our collection and discover a story worth reading.</p>
+<a href="/books" class="mt-7 inline-flex items-center gap-2 rounded-lg bg-[#788A82] px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#5E7369]"><i class="fa-solid fa-book-open"></i>Explore Books</a>
+</section>
+<% }else{ %>
+<div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
+<section class="space-y-5 lg:col-span-2">
+<div class="flex items-center justify-between gap-3">
+<h2 class="text-xl font-bold text-[#34443D]">Selected Books</h2>
+<span class="rounded-lg bg-[#E8EDE8] px-3 py-2 text-sm font-semibold text-[#52685D]"><%= totalBooks %> <%= totalBooks===1?'Book':'Books' %></span>
+</div>
+<% cartItems.forEach(item=>{ %>
+<article class="group flex flex-col gap-5 rounded-2xl border border-[#E1E5DE] bg-white p-4 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg sm:flex-row sm:items-center sm:p-5">
+<div class="flex h-40 w-32 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#E8EDE8] p-2">
+<% if(item.image){ %>
+<img src="<%= item.image %>" alt="<%= item.title %>" loading="lazy" class="h-full w-full object-contain transition duration-300 group-hover:scale-105" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+<div style="display:none" class="h-full w-full items-center justify-center text-3xl text-[#788A82]"><i class="fa-solid fa-book-open"></i></div>
+<% }else{ %>
+<i class="fa-solid fa-book-open text-4xl text-[#788A82]"></i>
+<% } %>
+</div>
+<div class="min-w-0 flex-1">
+<p class="text-xs font-semibold uppercase tracking-[0.15em] text-[#788A82]">Your Selected Book</p>
+<h3 class="mt-2 break-words text-xl font-bold leading-snug text-[#34443D]"><%= item.title %></h3>
+<p class="mt-3 text-sm text-[#6C766F]">Price: ₹<%= (Number(item.price)||0).toFixed(2) %></p>
+<p class="mt-2 text-sm text-[#6C766F]">Quantity: <span class="font-semibold text-[#34443D]"><%= item.quantity||1 %></span></p>
+<p class="mt-3 text-lg font-bold text-[#52685D]">₹<%= ((Number(item.price)||0)*(Number(item.quantity)||1)).toFixed(2) %></p>
+</div>
+<form action="/cart/remove/<%= item.bookId %>" method="POST" class="shrink-0">
+<button type="submit" class="inline-flex items-center gap-2 rounded-lg border border-[#E5D6D2] px-4 py-2.5 text-sm font-semibold text-[#A65F55] transition duration-300 hover:border-[#A65F55] hover:bg-[#FAF0ED]"><i class="fa-regular fa-trash-can"></i>Remove</button>
+</form>
+</article>
+<% }) %>
+<a href="/books" class="inline-flex items-center gap-2 pt-3 text-sm font-semibold text-[#52685D] transition hover:gap-3 hover:text-[#34443D]"><i class="fa-solid fa-arrow-left"></i>Continue Shopping</a>
+</section>
+<aside class="rounded-2xl border border-[#E1E5DE] bg-white p-6 shadow-sm sm:p-7 lg:sticky lg:top-6">
+<p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#788A82]">Almost Yours</p>
+<h2 class="mt-2 text-2xl font-bold text-[#34443D]">Order Summary</h2>
+<div class="mt-7 flex items-center justify-between border-b border-[#E4E6DF] pb-4 text-sm">
+<span class="text-[#6C766F]">Total Books</span>
+<span class="font-semibold text-[#34443D]"><%= totalBooks %></span>
+</div>
+<div class="mt-4 flex items-center justify-between border-b border-[#E4E6DF] pb-4 text-sm">
+<span class="text-[#6C766F]">Shipping</span>
+<span class="font-semibold text-[#52685D]">Free</span>
+</div>
+<div class="mt-6">
+<p class="text-sm text-[#6C766F]">Total Amount</p>
+<p class="mt-2 text-3xl font-bold text-[#34443D]">₹<%= totalAmount.toFixed(2) %></p>
+</div>
+<a href="/checkout" class="mt-7 flex w-full items-center justify-center gap-2 rounded-lg bg-[#788A82] px-5 py-3.5 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-[#5E7369]"><span>Proceed to Checkout</span><i class="fa-solid fa-arrow-right"></i></a>
+<a href="/books" class="mt-3 flex w-full items-center justify-center rounded-lg border border-[#D9E0DA] bg-white px-5 py-3 text-sm font-semibold text-[#34443D] transition duration-300 hover:bg-[#E8EDE8]">Continue Shopping</a>
+<div class="mt-6 rounded-xl bg-[#F7F5EF] p-4">
+<p class="flex items-start gap-3 text-xs leading-6 text-[#6C766F]"><i class="fa-solid fa-book-open mt-1 text-[#788A82]"></i>Every book brings a new idea, a new story and a new world to explore.</p>
+</div>
+</aside>
+</div>
+<% } %>
+</main>
+<footer class="mt-10 border-t border-[#E4E6DF] bg-[#F7F5EF] px-5 py-7 sm:px-10">
+<div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 text-center sm:flex-row sm:text-left">
+<div>
+<p class="text-lg font-bold text-[#34443D]">The Book Store</p>
+<p class="mt-1 text-sm text-[#6C766F]">Read. Learn. Grow.</p>
+</div>
+<p class="text-sm text-[#6C766F]">© <%= new Date().getFullYear() %> The Book Store. All rights reserved.</p>
+</div>
+</footer>
+</body>
+</html>

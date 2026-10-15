@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Book | The Book Store</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .edit-card {
+            box-shadow: 0 16px 45px rgba(36, 53, 45, 0.07);
+        }
+
+        .form-input {
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+        }
+
+        .form-input:focus {
+            border-color: #315b43;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(49, 91, 67, 0.10);
+            outline: none;
+        }
+
+        .update-button {
+            transition: all 0.25s ease;
+        }
+
+        .update-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(49, 91, 67, 0.16);
+        }
+
+        .update-button:active {
+            transform: translateY(0);
+        }
+
+        .cancel-button {
+            transition: all 0.25s ease;
+        }
+
+        .cancel-button:hover {
+            border-color: #315b43;
+            background-color: #f2f5ef;
+        }
+
+        .cover-preview {
+            background-image: radial-gradient(#dfe6d9 0.7px, transparent 0.7px);
+            background-size: 15px 15px;
+        }
+
+        input[type="file"]::file-selector-button {
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-[#f7f5ef] text-[#24352d]">
+    <%- include('includes/nav.ejs') %>
+    <main class="relative overflow-hidden px-4 py-9 sm:px-6 sm:py-12">
+        <div class="pointer-events-none absolute -left-24 top-20 h-64 w-64 rounded-full bg-[#e5eadf] opacity-60 blur-3xl"></div>
+        <div class="pointer-events-none absolute -bottom-16 right-0 h-72 w-72 rounded-full bg-[#e9e3d5] opacity-60 blur-3xl"></div>
+
+        <div class="relative z-10 mx-auto max-w-5xl">
+            <div class="mb-8 text-center">
+
+                <div class="mb-3 inline-flex items-center gap-2 rounded-full border border-[#dfe6d9] bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#52745a]">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        width="15" height="15" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor"
+                        stroke-width="1.8" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+                    </svg>
+                    Manage Your Collection
+                </div>
+
+                <h1 class="text-3xl font-bold tracking-tight text-[#24352d] sm:text-4xl">
+                    Edit Book Details
+                </h1>
+
+                <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-[#737a72] sm:text-base">
+                    Update your book information and cover to keep your collection fresh and organized.
+                </p>
+
+                <div class="mx-auto mt-5 h-1 w-12 rounded-full bg-[#52745a]"></div>
+
+            </div>
+            <div class="edit-card overflow-hidden rounded-3xl border border-[#e5e5da] bg-white">
+                <div class="flex items-center gap-4 border-b border-[#e5e8df] bg-[#f2f5ef] px-5 py-5 sm:px-8">
+
+                    <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-[#315b43] shadow-sm ring-1 ring-[#e3e8de]">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            width="23" height="23" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor"
+                            stroke-width="1.7" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M12 20h9"></path>
+                            <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L8 18l-4 1 1-4Z"></path>
+                        </svg>
+                    </div>
+
+                    <div class="min-w-0">
+                        <h2 class="text-lg font-bold text-[#24352d] sm:text-xl">
+                            Book Information
+                        </h2>
+                        <p class="mt-1 text-sm text-[#737a72]">
+                            Make changes to the details below
+                        </p>
+                    </div>
+
+                </div>
+                <form action="/books/edit/<%= book._id %>" method="POST" enctype="multipart/form-data" class="p-5 sm:p-8 lg:p-9">
+
+                    <div class="grid gap-8 md:grid-cols-2 md:gap-9">
+                        <div class="space-y-5">
+
+                            <div>
+                                <label for="title" class="mb-2 block text-sm font-semibold text-[#35483b]">
+                                    Book Title
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="title"
+                                    name="title"
+                                    value="<%= book.title %>"
+                                    placeholder="Enter book title"
+                                    required
+                                    class="form-input w-full rounded-xl border border-[#dfe4da] bg-[#fcfcfa] px-4 py-3.5 text-sm text-[#24352d] placeholder:text-[#a0a69e]"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="author" class="mb-2 block text-sm font-semibold text-[#35483b]">
+                                    Author Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="author"
+                                    name="author"
+                                    value="<%= book.author %>"
+                                    placeholder="Enter author name"
+                                    required
+                                    class="form-input w-full rounded-xl border border-[#dfe4da] bg-[#fcfcfa] px-4 py-3.5 text-sm text-[#24352d] placeholder:text-[#a0a69e]"
+                                >
+                            </div>
+
+                            <div>
+                                <label for="price" class="mb-2 block text-sm font-semibold text-[#35483b]">
+                                    Price (₹)
+                                </label>
+
+                                <div class="relative">
+                                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-sm font-bold text-[#52745a]">
+                                        ₹
+                                    </span>
+
+                                    <input
+                                        type="number"
+                                        id="price"
+                                        name="price"
+                                        value="<%= book.price %>"
+                                        min="0"
+                                        step="0.01"
+                                        placeholder="Enter book price"
+                                        required
+                                        class="form-input w-full rounded-xl border border-[#dfe4da] bg-[#fcfcfa] py-3.5 pl-10 pr-4 text-sm text-[#24352d] placeholder:text-[#a0a69e]"
+                                    >
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="category" class="mb-2 block text-sm font-semibold text-[#35483b]">
+                                    Book Category
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="category"
+                                    name="category"
+                                    value="<%= book.category %>"
+                                    placeholder="e.g. Fiction, Fantasy, History"
+                                    required
+                                    class="form-input w-full rounded-xl border border-[#dfe4da] bg-[#fcfcfa] px-4 py-3.5 text-sm text-[#24352d] placeholder:text-[#a0a69e]"
+                                >
+
+                                <p class="mt-2 flex items-start gap-1.5 text-xs leading-5 text-[#858b83]">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        width="14" height="14" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor"
+                                        stroke-width="1.8" stroke-linecap="round"
+                                        stroke-linejoin="round" class="mt-0.5 shrink-0">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 16v-4"></path>
+                                        <path d="M12 8h.01"></path>
+                                    </svg>
+                                    Enter the category that best describes this book.
+                                </p>
+                            </div>
+                            <div class="rounded-xl border border-[#e2e8dd] bg-[#f5f7f2] p-4">
+                                <div class="flex items-start gap-3">
+                                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-[#52745a]">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            width="18" height="18" viewBox="0 0 24 24"
+                                            fill="none" stroke="currentColor"
+                                            stroke-width="1.7" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path d="M12 3a6 6 0 0 0-4 10.47c.6.53 1 1.2 1 2.03h6c0-.83.4-1.5 1-2.03A6 6 0 0 0 12 3Z"></path>
+                                            <path d="M9 19h6"></path>
+                                            <path d="M10 22h4"></path>
+                                        </svg>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-sm font-semibold text-[#35483b]">
+                                            Quick Tip
+                                        </p>
+                                        <p class="mt-1 text-xs leading-5 text-[#737a72]">
+                                            Keep the title, author and category accurate so readers can find your book easily.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="flex min-w-0 flex-col">
+
+                            <div class="mb-2 flex items-center justify-between gap-3">
+                                <label class="block text-sm font-semibold text-[#35483b]">
+                                    Current Book Cover
+                                </label>
+
+                                <span class="rounded-full bg-[#edf2e9] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#52745a]">
+                                    Preview
+                                </span>
+                            </div>
+                            <div class="cover-preview flex min-h-[300px] flex-1 items-center justify-center overflow-hidden rounded-2xl border border-[#e3e7de] bg-[#f8f8f3] p-5 sm:min-h-[350px]">
+
+                                <% if (book.image) { %>
+
+                                    <img
+                                        src="<%= book.image %>"
+                                        alt="<%= book.title %> book cover"
+                                        class="block max-h-[350px] w-auto max-w-full rounded-md object-contain shadow-md"
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                    >
+
+                                    <div class="hidden min-h-[250px] w-full flex-col items-center justify-center text-center">
+                                        <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#78966f] shadow-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                width="30" height="30" viewBox="0 0 24 24"
+                                                fill="none" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M12 7v14"></path>
+                                                <path d="M3 18V5a2 2 0 0 1 2-2h3a4 4 0 0 1 4 4 4 4 0 0 1 4-4h3a2 2 0 0 1 2 2v13"></path>
+                                            </svg>
+                                        </div>
+
+                                        <p class="mt-4 text-sm font-semibold text-[#35483b]">
+                                            Image unavailable
+                                        </p>
+                                        <p class="mt-1 text-xs text-[#858b83]">
+                                            Upload a new book cover below.
+                                        </p>
+                                    </div>
+
+                                <% } else { %>
+
+                                    <div class="flex min-h-[250px] w-full flex-col items-center justify-center text-center">
+                                        <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#78966f] shadow-sm">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                width="30" height="30" viewBox="0 0 24 24"
+                                                fill="none" stroke="currentColor"
+                                                stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round">
+                                                <path d="M12 7v14"></path>
+                                                <path d="M3 18V5a2 2 0 0 1 2-2h3a4 4 0 0 1 4 4 4 4 0 0 1 4-4h3a2 2 0 0 1 2 2v13"></path>
+                                            </svg>
+                                        </div>
+
+                                        <p class="mt-4 text-sm font-semibold text-[#35483b]">
+                                            No Cover Image
+                                        </p>
+                                        <p class="mt-1 text-xs text-[#858b83]">
+                                            Upload a cover to represent this book.
+                                        </p>
+                                    </div>
+
+                                <% } %>
+
+                            </div>
+                            <div class="mt-5">
+
+                                <label for="img" class="mb-2 block text-sm font-semibold text-[#35483b]">
+                                    Upload New Cover
+                                </label>
+
+                                <input
+                                    type="file"
+                                    id="img"
+                                    name="img"
+                                    accept="image/*"
+                                    class="block w-full cursor-pointer rounded-xl border border-[#dfe4da] bg-[#fcfcfa] text-sm text-[#737a72] file:mr-3 file:cursor-pointer file:border-0 file:bg-[#edf2e9] file:px-4 file:py-3 file:font-semibold file:text-[#315b43] hover:file:bg-[#e1e9dc]"
+                                >
+
+                                <p class="mt-2 flex items-start gap-1.5 text-xs leading-5 text-[#858b83]">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        width="14" height="14" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor"
+                                        stroke-width="1.8" stroke-linecap="round"
+                                        stroke-linejoin="round" class="mt-0.5 shrink-0">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M12 16v-4"></path>
+                                        <path d="M12 8h.01"></path>
+                                    </svg>
+                                    Choose a new image only if you want to replace the current cover.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="mt-8 flex flex-col-reverse gap-3 border-t border-[#e8e9e2] pt-6 sm:flex-row sm:items-center sm:justify-between">
+
+                        <p class="hidden text-xs text-[#858b83] sm:block">
+                            Review your changes before updating.
+                        </p>
+
+                        <div class="flex flex-col-reverse gap-3 sm:flex-row">
+
+                            <a
+                                href="/books"
+                                class="cancel-button inline-flex items-center justify-center gap-2 rounded-xl border border-[#dfe4da] bg-white px-6 py-3 text-sm font-semibold text-[#35483b]"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    width="17" height="17" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="m15 18-6-6 6-6"></path>
+                                </svg>
+
+                                Cancel
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="update-button inline-flex items-center justify-center gap-2 rounded-xl bg-[#315b43] px-7 py-3 text-sm font-bold text-white shadow-md shadow-[#315b43]/10 hover:bg-[#244832] focus:outline-none focus:ring-4 focus:ring-[#315b43]/20"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    width="18" height="18" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor"
+                                    stroke-width="1.9" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+
+                                Update Book
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <p class="mt-5 text-center text-xs leading-6 text-[#858b83]">
+                The Book Store · Made with care for every book lover.
+            </p>
+
+        </div>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Books | The Book Store</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .heading {
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .book-card {
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            cursor: pointer;
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(36, 53, 45, 0.10);
+        }
+
+        .book-cover {
+            transition: transform 0.35s ease;
+        }
+
+        .book-card:hover .book-cover {
+            transform: scale(1.04);
+        }
+
+        .book-card.selected-book {
+            border-color: #8ba18e;
+            background: #f5f8f2;
+            box-shadow: 0 0 0 2px #dce6d9;
+        }
+
+        .description-panel {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        #descriptionPanel {
+            padding: 14px;
+        }
+
+        #descriptionPanel .description-panel-header {
+            margin-bottom: 12px;
+        }
+
+        #descriptionPanel .detail-cover-wrapper {
+            padding: 10px;
+        }
+
+        #descriptionPanel .detail-cover-box {
+            height: 150px;
+            width: 108px;
+        }
+
+        #descriptionPanel .detail-information {
+            margin-top: 14px;
+        }
+
+        #descriptionPanel .detail-description-section {
+            margin-top: 16px;
+            padding-top: 14px;
+        }
+
+        #descriptionPanel .detail-reading-note {
+            margin-top: 14px;
+            padding: 10px;
+        }
+
+        #descriptionPanel .detail-book-title {
+            font-size: 22px;
+            line-height: 1.35;
+        }
+
+        #descriptionPanel .detail-description-text {
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        #descriptionPanel .detail-price-box {
+            margin-top: 12px;
+            padding: 9px 12px;
+        }
+
+        @media (min-width: 1024px) {
+            #descriptionPanel {
+                padding: 14px;
+            }
+        }
+
+        @media (max-width: 639px) {
+            #descriptionPanel {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-[#f7f6f1] text-[#263b30]">
+
+    <%- include('includes/nav.ejs') %>
+    <section id="heroSection"
+             class="mx-auto max-w-7xl px-5 pt-10 pb-6 md:px-8 md:pt-14">
+
+        <div class="grid items-center gap-6 rounded-3xl bg-[#e9eee5] px-6 py-8 md:grid-cols-2 md:px-12 md:py-10">
+
+            <div>
+                <p class="mb-3 text-xs font-bold uppercase tracking-[3px] text-[#9a754a]">
+                    A little world between pages
+                </p>
+
+                <h1 class="heading max-w-xl text-4xl font-bold leading-tight text-[#294b39] md:text-5xl">
+                    Find your next
+                    <span class="text-[#ad8050]">favourite</span>
+                    story.
+                </h1>
+
+                <p class="mt-4 max-w-lg text-sm leading-7 text-[#68776b] md:text-base">
+                    Explore a thoughtfully collected selection of books,
+                    discover new ideas and find stories worth remembering.
+                </p>
+
+                <a href="#book-collection"
+                   class="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#294b39] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#1e382a]">
+                    Explore Collection
+                    <span>→</span>
+                </a>
+            </div>
+
+            <div class="hidden justify-center md:flex">
+                <div class="relative flex h-60 w-60 items-center justify-center rounded-full bg-[#d9e2d4]">
+
+                    <div class="absolute h-44 w-32 rotate-[-9deg] rounded-md bg-[#b58a5a] shadow-xl"></div>
+
+                    <div class="absolute ml-7 mt-4 h-44 w-32 rotate-[8deg] rounded-md border-l-4 border-[#d5b68e] bg-[#526b58] shadow-xl"></div>
+
+                    <div class="relative z-10 -ml-7 -mt-4 flex h-44 w-32 rotate-[-3deg] flex-col items-center justify-center border-l-4 border-[#e0c9a7] bg-[#f5ead8] p-3 text-center shadow-2xl">
+                        <span class="mb-2 text-xl text-[#ad8050]">✦</span>
+
+                        <span class="heading text-xl font-bold leading-tight text-[#294b39]">
+                            The Art<br>of Reading
+                        </span>
+
+                        <span class="mt-3 text-[8px] uppercase tracking-[2px] text-[#92734f]">
+                            Discover • Imagine
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <main id="book-collection"
+          class="mx-auto max-w-7xl px-5 py-7 md:px-8 md:py-10">
+
+        <div class="mb-7 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+
+            <div>
+                <p class="mb-2 text-xs font-bold uppercase tracking-[2px] text-[#ad8050]">
+                    Your next chapter awaits
+                </p>
+
+                <h2 class="heading text-3xl font-bold text-[#294b39] md:text-4xl">
+                    Our Book Collection
+                </h2>
+
+                <p id="collectionSubtitle" class="mt-2 text-sm text-[#788078]">
+                    Discover a book that speaks to you.
+                    Double-click any book to read its description.
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+
+                <p id="bookCount" class="text-sm font-medium text-[#68776b]">
+                    <%= books.length %> books available
+                </p>
+
+                <% if (isAdmin) { %>
+
+                    <a href="/books/new"
+                       class="inline-flex shrink-0 items-center gap-2 rounded-lg bg-[#294b39] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1e382a]">
+                        <span class="text-lg leading-none">+</span>
+                        Add New Book
+                    </a>
+                    <a href="/admin/logout"
+                        class="inline-flex shrink-0 items-center gap-2 rounded-lg border border-[#dce4d9] bg-[#edf2e9] px-4 py-2.5 text-sm font-semibold text-[#365b40] transition duration-200 hover:border-[#294b39] hover:bg-[#294b39] hover:text-white">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    Logout
+</a>
+
+
+                <% } %>
+
+            </div>
+        </div>
+        <div id="filterSection" class="mb-7 flex flex-col gap-3 sm:flex-row">
+
+            <div class="relative flex-1">
+                <span class="absolute top-1/2 left-4 -translate-y-1/2 text-lg text-[#89958a]">
+                    ⌕
+                </span>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by book title or author..."
+                    class="w-full rounded-xl border border-[#e4e4da] bg-white py-3 pr-4 pl-11 text-sm outline-none transition placeholder:text-[#a0a69e] focus:border-[#8ba18e] focus:ring-2 focus:ring-[#dce6d9]"
+                >
+            </div>
+
+            <select
+                id="categoryFilter"
+                class="rounded-xl border border-[#e4e4da] bg-white px-4 py-3 text-sm text-[#526356] outline-none focus:border-[#8ba18e] sm:min-w-48">
+
+                <option value="">All Categories</option>
+
+                <% [...new Set(books.map(book => book.category).filter(Boolean))].sort().forEach(category => { %>
+                    <option value="<%= category %>"><%= category %></option>
+                <% }) %>
+
+            </select>
+            <button
+                type="button"
+                id="savedBooksFilter"
+                aria-pressed="false"
+                class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-[#dce4d9] bg-white px-4 py-3 text-sm font-semibold text-[#365b40] transition hover:bg-[#edf2e9]">
+
+                <span id="savedFilterIcon">♡</span>
+                <span id="savedFilterText">Saved Books</span>
+
+                <span id="savedBooksCount"
+                      class="rounded-full bg-[#edf2e9] px-2 py-0.5 text-xs">
+                    0
+                </span>
+            </button>
+
+        </div>
+        <div id="collectionLayout">
+            <section id="booksSection">
+
+                <% if (books.length > 0) { %>
+
+                    <div id="booksGrid"
+                         class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+
+                        <% books.forEach(book => { %>
+
+                            <article
+                                class="book-card book-item flex items-start gap-3 overflow-hidden rounded-xl border border-[#e9e7de] bg-white p-3 sm:gap-4"
+                                data-book-id="<%= book._id %>"
+                                data-title="<%= book.title || 'Untitled Book' %>"
+                                data-author="<%= book.author || 'Unknown Author' %>"
+                                data-category="<%= book.category || 'General' %>"
+                                data-description="<%= book.description || '' %>"
+                                data-price="<%= Number(book.price || 0).toLocaleString('en-IN') %>"
+                                data-image="<%= book.image || '' %>"
+                                tabindex="0"
+                                role="button"
+                                aria-label="Double-click to view book description">
+                                <div class="w-24 shrink-0 sm:w-28">
+
+                                    <div class="flex h-40 items-center justify-center overflow-hidden rounded-lg bg-[#eeeee7] p-1.5 sm:h-44">
+
+                                        <% if (book.image) { %>
+
+                                            <img
+                                                src="<%= book.image %>"
+                                                alt="<%= book.title %> cover"
+                                                loading="lazy"
+                                                class="book-cover h-full w-full object-contain"
+                                                onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                                            >
+
+                                            <div style="display:none"
+                                                 class="h-full w-full flex-col items-center justify-center p-2 text-center">
+
+                                                <span class="text-2xl">📚</span>
+
+                                                <span class="mt-1 text-[10px] text-[#788078]">
+                                                    Cover unavailable
+                                                </span>
+                                            </div>
+
+                                        <% } else { %>
+
+                                            <div class="flex h-full w-full flex-col items-center justify-center p-2 text-center">
+                                                <span class="text-3xl">📚</span>
+
+                                                <span class="mt-2 text-[10px] text-[#788078]">
+                                                    No book cover
+                                                </span>
+                                            </div>
+
+                                        <% } %>
+
+                                    </div>
+                                </div>
+                                <div class="flex min-h-40 min-w-0 flex-1 flex-col self-stretch sm:min-h-44">
+                                    <div class="flex items-center justify-between gap-1">
+
+                                        <span class="inline-block max-w-[75%] truncate rounded-md bg-[#edf2e9] px-2 py-1 text-[9px] font-semibold uppercase tracking-wide text-[#4f6c52] sm:text-[10px]">
+                                            <%= book.category || 'General' %>
+                                        </span>
+                                        <button
+                                            type="button"
+                                            class="save-book-btn inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[#e4e8df] bg-white text-lg text-[#526356] transition hover:border-[#8ba18e] hover:bg-[#edf2e9]"
+                                            data-save-id="<%= book._id %>"
+                                            aria-label="Save this book"
+                                            aria-pressed="false"
+                                            title="Save book">
+                                            ♡
+                                        </button>
+
+                                    </div>
+
+                                    <h3 class="heading mt-2 line-clamp-2 text-sm font-bold leading-snug text-[#294b39] sm:text-base">
+                                        <%= book.title %>
+                                    </h3>
+
+                                    <p class="mt-1 truncate text-[11px] text-[#818980] sm:text-xs">
+                                        by <%= book.author || 'Unknown Author' %>
+                                    </p>
+                                    <div class="mt-3 flex items-center justify-between gap-1 border-t border-[#efeee8] pt-2">
+
+                                        <p class="text-sm font-bold text-[#294b39] sm:text-base">
+                                            ₹<%= Number(book.price || 0).toLocaleString('en-IN') %>
+                                        </p>
+
+                                        <span class="text-xs text-[#b28b59]">✦</span>
+                                    </div>
+                                    <form action="/cart/add/<%= book._id %>" method="POST">
+                                        <button
+                                            type="submit"
+                                            class="w-full rounded-lg bg-[#34443D] px-4 py-2.5
+                                            font-semibold text-white transition hover:bg-[#24352D]">
+                                            <i class="fa-solid fa-cart-shopping mr-2"></i>
+                                            Buy Now
+                                        </button>
+                                    </form>
+                                    <% if (isAdmin) { %>
+
+                                        <div class="mt-2 grid grid-cols-2 gap-2">
+
+                                            <a href="/books/edit/<%= book._id %>"
+                                               class="rounded-md border border-[#dce4d9] py-1.5 text-center text-[11px] font-semibold text-[#365b40] transition hover:bg-[#edf2e9]">
+                                                Edit
+                                            </a>
+
+                                            <form action="/books/delete/<%= book._id %>"
+                                                  method="POST"
+                                                  onsubmit="return confirm('Are you sure you want to delete this book?');">
+
+                                                <button
+                                                    type="submit"
+                                                    class="w-full rounded-md border border-[#f0deda] py-1.5 text-[11px] font-semibold text-[#a4554b] transition hover:bg-[#fbefed]">
+                                                    Delete
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    <% } %>
+
+                                </div>
+                            </article>
+
+                        <% }) %>
+
+                    </div>
+                    <div id="noResults" class="hidden py-16 text-center">
+
+                        <div class="text-5xl">📖</div>
+
+                        <h3 id="noResultsTitle"
+                            class="heading mt-4 text-2xl font-bold text-[#294b39]">
+                            No books found
+                        </h3>
+
+                        <p id="noResultsMessage" class="mt-2 text-sm text-[#788078]">
+                            Try another title, author or category.
+                        </p>
+
+                        <button
+                            id="resetSearch"
+                            class="mt-5 rounded-lg bg-[#294b39] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#1e382a]">
+                            Show All Books
+                        </button>
+
+                    </div>
+
+                <% } else { %>
+                    <div class="rounded-2xl border border-dashed border-[#d7ded2] bg-white px-5 py-16 text-center">
+
+                        <div class="text-5xl">📚</div>
+
+                        <h3 class="heading mt-5 text-2xl font-bold text-[#294b39]">
+                            Your collection starts here
+                        </h3>
+
+                        <p class="mx-auto mt-3 max-w-md text-sm leading-6 text-[#788078]">
+                            There are no books available right now. Add your first book
+                            to start building your collection.
+                        </p>
+
+                        <% if (isAdmin) { %>
+
+                            <a href="/books/new"
+                               class="mt-6 inline-block rounded-lg bg-[#294b39] px-6 py-3 text-sm font-semibold text-white hover:bg-[#1e382a]">
+                                + Add Your First Book
+                            </a>
+
+                        <% } %>
+
+                    </div>
+
+                <% } %>
+
+            </section>
+
+            <aside id="descriptionPanel"
+                   class="description-panel hidden min-w-0 rounded-2xl border border-[#e5e5d9] bg-white p-5 shadow-sm sm:p-7">
+
+                <div class="description-panel-header mb-5 flex items-center justify-between gap-3">
+
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[2px] text-[#ad8050]">
+                            Between the pages
+                        </p>
+
+                        <h2 class="heading mt-1 text-xl font-bold text-[#294b39]">
+                            Book Details
+                        </h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="backToBooks"
+                        class="inline-flex shrink-0 items-center gap-1 rounded-lg border border-[#dce4d9] px-3 py-2 text-xs font-semibold text-[#365b40] transition hover:bg-[#edf2e9]">
+                        ← Back to All Books
+                    </button>
+
+                </div>
+                <div class="detail-cover-wrapper flex justify-center rounded-xl bg-[#f3f3ec] p-5">
+
+                    <div class="detail-cover-box flex h-56 w-40 items-center justify-center overflow-hidden rounded-lg bg-[#eeeee7] p-2 shadow-sm">
+
+                        <img
+                            id="detailImage"
+                            src=""
+                            alt="Selected book cover"
+                            class="hidden h-full w-full object-contain"
+                        >
+
+                        <div id="detailImageFallback"
+                             class="flex flex-col items-center justify-center text-center">
+
+                            <span class="text-5xl">📚</span>
+
+                            <p class="mt-3 text-xs text-[#788078]">
+                                Book Cover
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-information mt-6">
+
+                    <span id="detailCategory"
+                          class="inline-block rounded-md bg-[#edf2e9] px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-[#4f6c52]">
+                        General
+                    </span>
+
+                    <h2 id="detailTitle"
+                        class="detail-book-title heading mt-3 break-words text-2xl font-bold leading-tight text-[#294b39] sm:text-3xl">
+                        Book Title
+                    </h2>
+
+                    <p class="mt-3 text-sm text-[#788078]">
+                        Written by
+                        <span id="detailAuthor" class="font-semibold text-[#526356]">
+                            Author
+                        </span>
+                    </p>
+
+                    <div class="detail-price-box mt-5 flex items-center justify-between rounded-xl border border-[#e5e7dc] bg-[#f9f9f4] px-4 py-3">
+
+                        <span class="text-sm text-[#788078]">
+                            Book Price
+                        </span>
+
+                        <span id="detailPrice"
+                              class="text-xl font-bold text-[#294b39]">
+                            ₹0
+                        </span>
+                    </div>
+                </div>
+                <div class="detail-description-section mt-6 border-t border-[#e9e7de] pt-5">
+
+                    <h3 class="heading flex items-center gap-2 text-lg font-bold text-[#294b39]">
+                        <span class="text-[#ad8050]">✦</span>
+                        About This Book
+                    </h3>
+
+                    <p id="detailDescription"
+                       class="detail-description-text mt-3 whitespace-pre-line text-sm leading-7 text-[#68776b]">
+                    </p>
+
+                </div>
+                <div class="detail-reading-note mt-6 rounded-xl bg-[#edf2e9] p-4">
+
+                    <p class="text-xs leading-6 text-[#526356]">
+                        <span class="font-bold text-[#294b39]">A little reading note:</span>
+                        Every book offers a new perspective. Take your time
+                        and enjoy discovering your next favourite.
+                    </p>
+
+                </div>
+
+            </aside>
+
+        </div>
+    </main>
+
+    <footer class="mt-8 border-t border-[#e7e5dc] bg-[#eeefe8]">
+
+        <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 px-5 py-6 text-center sm:flex-row sm:text-left md:px-8">
+
+            <a href="/" class="heading text-xl font-bold text-[#294b39]">
+                The Book Store<span class="text-[#b78a55]">.</span>
+            </a>
+
+            <p class="text-xs text-[#788078]">
+                A good book can change your world.
+            </p>
+
+            <p class="text-xs text-[#788078]">
+                © <%= new Date().getFullYear() %> The Book Store
+            </p>
+
+        </div>
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const bookItems = document.querySelectorAll('.book-item');
+        const booksGrid = document.getElementById('booksGrid');
+        const booksSection = document.getElementById('booksSection');
+        const collectionLayout = document.getElementById('collectionLayout');
+        const descriptionPanel = document.getElementById('descriptionPanel');
+        const backToBooks = document.getElementById('backToBooks');
+        const noResults = document.getElementById('noResults');
+        const noResultsTitle = document.getElementById('noResultsTitle');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const resetSearch = document.getElementById('resetSearch');
+        const heroSection = document.getElementById('heroSection');
+        const filterSection = document.getElementById('filterSection');
+        const collectionSubtitle = document.getElementById('collectionSubtitle');
+        const bookCount = document.getElementById('bookCount');
+        const detailImage = document.getElementById('detailImage');
+        const detailImageFallback = document.getElementById('detailImageFallback');
+        const detailTitle = document.getElementById('detailTitle');
+        const detailAuthor = document.getElementById('detailAuthor');
+        const detailCategory = document.getElementById('detailCategory');
+        const detailPrice = document.getElementById('detailPrice');
+        const detailDescription = document.getElementById('detailDescription');
+
+        
+        const savedBooksFilter = document.getElementById('savedBooksFilter');
+        const savedBooksCount = document.getElementById('savedBooksCount');
+        const savedFilterIcon = document.getElementById('savedFilterIcon');
+        const savedFilterText = document.getElementById('savedFilterText');
+        const saveButtons = document.querySelectorAll('.save-book-btn');
+
+        let selectedBook = null;
+        let showSavedOnly = false;
+        const STORAGE_KEY = 'bookStoreSavedBooks';
+
+        function getSavedBooks() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                return Array.isArray(saved) ? saved : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function saveSavedBooks(savedBooks) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(savedBooks));
+            } catch (error) {
+                alert('Books could not be saved in this browser. Please check your browser settings.');
+            }
+        }
+
+        function isBookSaved(bookId) {
+            return getSavedBooks().includes(String(bookId));
+        }
+
+        function updateSavedButton(button) {
+            const bookId = String(button.dataset.saveId);
+            const saved = isBookSaved(bookId);
+
+            button.textContent = saved ? '♥' : '♡';
+            button.classList.toggle('bg-[#edf2e9]', saved);
+            button.classList.toggle('text-[#365b40]', saved);
+            button.classList.toggle('border-[#8ba18e]', saved);
+            button.setAttribute('aria-pressed', String(saved));
+
+            button.setAttribute(
+                'aria-label',
+                saved ? 'Remove from saved books' : 'Save this book'
+            );
+
+            button.title = saved ? 'Remove from Saved Books' : 'Save book';
+        }
+
+        function updateSavedInterface() {
+            const savedBooks = getSavedBooks();
+            const availableSavedCount = Array.from(bookItems).filter(book =>
+                savedBooks.includes(String(book.dataset.bookId))
+            ).length;
+
+            savedBooksCount.textContent = availableSavedCount;
+            savedFilterIcon.textContent = showSavedOnly ? '♥' : '♡';
+            savedFilterText.textContent = showSavedOnly ? 'Show All Books' : 'Saved Books';
+
+            savedBooksFilter.setAttribute('aria-pressed', String(showSavedOnly));
+            savedBooksFilter.classList.toggle('bg-[#edf2e9]', showSavedOnly);
+            savedBooksFilter.classList.toggle('border-[#8ba18e]', showSavedOnly);
+
+            saveButtons.forEach(updateSavedButton);
+        }
+
+        saveButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const bookId = String(button.dataset.saveId);
+                let savedBooks = getSavedBooks();
+
+                if (savedBooks.includes(bookId)) {
+                    savedBooks = savedBooks.filter(id => id !== bookId);
+                } else {
+                    savedBooks.push(bookId);
+                }
+
+                saveSavedBooks(savedBooks);
+                updateSavedInterface();
+                filterBooks();
+            });
+        });
+        savedBooksFilter.addEventListener('click', function () {
+            if (selectedBook) {
+                showAllBooks();
+            }
+
+            showSavedOnly = !showSavedOnly;
+
+            updateSavedInterface();
+            filterBooks();
+
+            if (showSavedOnly) {
+                collectionSubtitle.textContent =
+                    'Your saved books are collected here for easy access.';
+            } else {
+                collectionSubtitle.textContent =
+                    'Discover a book that speaks to you. Double-click any book to read its description.';
+            }
+        });
+
+        const bookDescriptions = {
+            "the diary of a young girl":
+                "The Diary of a Young Girl is the moving diary of Anne Frank, a Jewish teenager who went into hiding with her family during the Second World War. Through her writing, she shares her daily experiences, hopes, fears and dreams while living in hiding. The book offers a powerful perspective on courage, humanity and the importance of freedom.",
+
+            "pride and prejudice":
+                "Pride and Prejudice by Jane Austen follows Elizabeth Bennet as she navigates family expectations, social class and matters of the heart. Her complicated relationship with Mr Darcy challenges both characters to question their first impressions. This classic explores love, personal growth and the danger of judging others too quickly.",
+
+            "the jungle book":
+                "The Jungle Book by Rudyard Kipling is a collection of stories set in the Indian jungle. One of its best-known stories follows Mowgli, a human child raised by wolves, as he learns the laws of the jungle with the help of Baloo and Bagheera. The stories explore friendship, courage, belonging and survival.",
+
+            "the hobbit":
+                "The Hobbit by J. R. R. Tolkien follows Bilbo Baggins, a comfort-loving hobbit whose peaceful life changes when he joins a company of dwarves on a quest to reclaim their treasure from the dragon Smaug. Along the way, Bilbo discovers courage and cleverness he never knew he possessed. It is a fantasy adventure filled with magical creatures and unexpected challenges.",
+
+            "to kill a mockingbird":
+                "To Kill a Mockingbird by Harper Lee is narrated by Scout Finch, a young girl growing up in the American South. Through her family and her father Atticus Finch's defence of a Black man facing an unjust accusation, Scout encounters prejudice, compassion and moral courage. The story examines justice, empathy and understanding others.",
+
+            "the fault in our stars":
+                "The Fault in Our Stars by John Green follows Hazel Grace Lancaster and Augustus Waters, two teenagers who meet at a support group and form a meaningful relationship. Their journey explores love, illness, loss and the search for meaning. It is an emotional story about human connection and making the most of the time we have.",
+
+            "the blue umbrella":
+                "The Blue Umbrella by Ruskin Bond is a charming story set in the hills of India. It follows a young village girl whose beautiful blue umbrella attracts admiration and envy from those around her. The story explores kindness, jealousy, generosity and forgiveness.",
+
+            "atomic habits":
+                "Atomic Habits by James Clear explains how small, consistent changes can lead to remarkable long-term improvements. It presents practical strategies for building good habits, breaking unhelpful ones and creating routines that support personal goals.",
+
+            "rich dad poor dad":
+                "Rich Dad Poor Dad by Robert T. Kiyosaki discusses financial education, money management, assets and liabilities through contrasting lessons about wealth. It encourages readers to think carefully about spending, saving and investing.",
+
+            "the alchemist":
+                "The Alchemist by Paulo Coelho follows Santiago, a young shepherd who travels in search of a treasure he dreams about. During his journey, he meets people who teach him about purpose, courage and listening to his heart. The novel explores dreams and self-discovery.",
+
+            "wings of fire":
+                "Wings of Fire is the autobiography of A. P. J. Abdul Kalam, written with Arun Tiwari. It describes Kalam's childhood, education and journey as an aerospace scientist, including his contribution to India's space and missile programmes. The book highlights perseverance, learning and teamwork.",
+
+            "the power of your subconscious mind":
+                "The Power of Your Subconscious Mind by Joseph Murphy explores how thoughts, beliefs and mental habits may influence everyday life. It encourages readers to develop constructive thinking and confidence while working towards their goals.",
+
+            "think and grow rich":
+                "Think and Grow Rich by Napoleon Hill presents principles related to goal-setting, persistence, planning and personal achievement. It encourages readers to define their ambitions and take consistent action.",
+
+            "the 7 habits of highly effective people":
+                "The 7 Habits of Highly Effective People by Stephen R. Covey presents a framework for improving personal effectiveness and relationships. It discusses taking responsibility, setting priorities, understanding others and working collaboratively.",
+
+            "ikigai":
+                "Ikigai by Héctor García and Francesc Miralles explores the Japanese idea of finding meaning and purpose in everyday life. The book encourages readers to discover what makes life meaningful through lifestyle, community and healthy routines.",
+
+            "the psychology of money":
+                "The Psychology of Money by Morgan Housel explores how emotions, behaviour and personal experiences shape financial decisions. It discusses saving, risk, patience and long-term thinking.",
+
+            "a brief history of time":
+                "A Brief History of Time by Stephen Hawking introduces major questions about the universe, including black holes, the Big Bang, space and time. It explores scientific ideas about how the cosmos works.",
+
+            "the little prince":
+                "The Little Prince by Antoine de Saint-Exupéry tells the story of a young prince who travels between planets and meets unusual characters. The book reflects on friendship, love, responsibility and the difference between childhood and adulthood.",
+
+            "the secret":
+                "The Secret by Rhonda Byrne presents ideas about how thoughts and attitudes can influence the way people approach their goals. It focuses on optimism, gratitude and visualising desired outcomes.",
+
+            "the monk who sold his ferrari":
+                "The Monk Who Sold His Ferrari by Robin Sharma follows a successful lawyer who rethinks his life after a personal crisis. The book discusses mindfulness, discipline, purpose and personal well-being.",
+
+            "alice's adventures in wonderland":
+                "Alice's Adventures in Wonderland by Lewis Carroll follows Alice as she falls into a strange world filled with unusual creatures, curious conversations and unexpected adventures. The story blends fantasy, humour and wordplay.",
+
+            "harry potter and the philosopher's stone":
+                "Harry Potter and the Philosopher's Stone by J. K. Rowling introduces Harry, an orphan who discovers that he is a wizard. At Hogwarts School of Witchcraft and Wizardry, he makes friends, learns magic and uncovers secrets about his past.",
+
+            "harry potter and the sorcerer's stone":
+                "Harry Potter and the Sorcerer's Stone by J. K. Rowling introduces Harry, an orphan who discovers that he is a wizard. At Hogwarts School of Witchcraft and Wizardry, he makes friends, learns magic and uncovers secrets about his past."
+        };
+
+        function getBookDescription(title, savedDescription) {
+            if (savedDescription && savedDescription.trim()) {
+                return savedDescription.trim();
+            }
+
+            const normalizedTitle = title
+                .toLowerCase()
+                .replace(/[’‘]/g, "'")
+                .replace(/[–—]/g, '-')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            if (bookDescriptions[normalizedTitle]) {
+                return bookDescriptions[normalizedTitle];
+            }
+
+            const matchingTitle = Object.keys(bookDescriptions).find(
+                key => normalizedTitle.includes(key) || key.includes(normalizedTitle)
+            );
+
+            if (matchingTitle) {
+                return bookDescriptions[matchingTitle];
+            }
+
+            return 'A detailed description for "' + title +
+                '" has not been added yet. Add this book\'s description to the ' +
+                'description field in your MongoDB database to display its full summary here.';
+        }
+
+        // Open the selected book in a side-by-side layout.
+        function showBookDescription(book) {
+            selectedBook = book;
+
+            detailTitle.textContent = book.dataset.title || 'Untitled Book';
+            detailAuthor.textContent = book.dataset.author || 'Unknown Author';
+            detailCategory.textContent = book.dataset.category || 'General';
+            detailPrice.textContent = '₹' + (book.dataset.price || '0');
+
+            detailDescription.textContent = getBookDescription(
+                book.dataset.title || 'Untitled Book',
+                book.dataset.description || ''
+            );
+
+            detailImage.onload = function () {
+                detailImage.classList.remove('hidden');
+                detailImageFallback.classList.add('hidden');
+            };
+
+            detailImage.onerror = function () {
+                detailImage.classList.add('hidden');
+                detailImageFallback.classList.remove('hidden');
+                detailImage.removeAttribute('src');
+            };
+
+            const imageUrl = book.dataset.image || '';
+
+            if (imageUrl.trim()) {
+                detailImage.src = imageUrl;
+            } else {
+                detailImage.removeAttribute('src');
+                detailImage.classList.add('hidden');
+                detailImageFallback.classList.remove('hidden');
+            }
+
+            bookItems.forEach(item => {
+                item.classList.remove('selected-book');
+                item.classList.add('hidden');
+                item.setAttribute('aria-pressed', 'false');
+            });
+
+            book.classList.remove('hidden');
+            book.classList.add('selected-book');
+            book.setAttribute('aria-pressed', 'true');
+
+            // Layout changes only after double-click.
+            collectionLayout.classList.add(
+                'grid',
+                'grid-cols-1',
+                'items-start',
+                'gap-6',
+                'lg:grid-cols-12'
+            );
+
+            booksSection.classList.add('min-w-0', 'lg:col-span-5');
+            booksGrid.classList.remove('sm:grid-cols-2', 'lg:grid-cols-3');
+            booksGrid.classList.add('grid-cols-1');
+
+            descriptionPanel.classList.remove('hidden');
+            descriptionPanel.classList.add('lg:col-span-7');
+
+            heroSection.classList.add('hidden');
+            filterSection.classList.add('hidden');
+            bookCount.classList.add('hidden');
+
+            collectionSubtitle.textContent =
+                'Explore the details and description of your selected book.';
+
+            document.getElementById('book-collection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        function showAllBooks() {
+            selectedBook = null;
+
+            bookItems.forEach(item => {
+                item.classList.remove('hidden', 'selected-book');
+                item.setAttribute('aria-pressed', 'false');
+            });
+
+            collectionLayout.classList.remove(
+                'grid',
+                'grid-cols-1',
+                'items-start',
+                'gap-6',
+                'lg:grid-cols-12'
+            );
+
+            booksSection.classList.remove('min-w-0', 'lg:col-span-5');
+            booksGrid.classList.remove('grid-cols-1');
+            booksGrid.classList.add('sm:grid-cols-2', 'lg:grid-cols-3');
+
+            descriptionPanel.classList.add('hidden');
+            descriptionPanel.classList.remove('lg:col-span-7');
+
+            heroSection.classList.remove('hidden');
+            filterSection.classList.remove('hidden');
+            bookCount.classList.remove('hidden');
+
+            if (showSavedOnly) {
+                collectionSubtitle.textContent =
+                    'Your saved books are collected here for easy access.';
+            } else {
+                collectionSubtitle.textContent =
+                    'Discover a book that speaks to you. Double-click any book to read its description.';
+            }
+
+            filterBooks();
+
+            document.getElementById('book-collection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        bookItems.forEach(book => {
+            book.setAttribute('aria-pressed', 'false');
+
+            book.addEventListener('dblclick', function (event) {
+                if (event.target.closest('a, button, form')) {
+                    return;
+                }
+
+                showBookDescription(book);
+            });
+
+            book.addEventListener('keydown', function (event) {
+                if (
+                    (event.key === 'Enter' || event.key === ' ') &&
+                    !event.target.closest('a, button, form')
+                ) {
+                    event.preventDefault();
+                    showBookDescription(book);
+                }
+            });
+        });
+
+        backToBooks.addEventListener('click', showAllBooks);
+
+        function filterBooks() {
+            const searchText = searchInput.value.toLowerCase().trim();
+            const selectedCategory = categoryFilter.value.toLowerCase();
+
+            let visibleBooks = 0;
+
+            bookItems.forEach(book => {
+                const title = (book.dataset.title || '').toLowerCase();
+                const author = (book.dataset.author || '').toLowerCase();
+                const category = (book.dataset.category || '').toLowerCase();
+                const bookId = String(book.dataset.bookId);
+
+                const matchesSearch =
+                    title.includes(searchText) ||
+                    author.includes(searchText);
+
+                const matchesCategory =
+                    selectedCategory === '' ||
+                    category === selectedCategory;
+
+                const matchesSaved =
+                    !showSavedOnly || isBookSaved(bookId);
+
+                const matches =
+                    matchesSearch && matchesCategory && matchesSaved;
+
+                if (matches) {
+                    visibleBooks++;
+                }
+
+                if (selectedBook) {
+                    book.classList.toggle(
+                        'hidden',
+                        book !== selectedBook || !matches
+                    );
+                } else {
+                    book.classList.toggle('hidden', !matches);
+                }
+            });
+
+            if (noResults && booksGrid) {
+                noResults.classList.toggle('hidden', visibleBooks !== 0);
+                booksGrid.classList.toggle('hidden', visibleBooks === 0);
+
+                if (visibleBooks === 0 && showSavedOnly) {
+                    noResultsTitle.textContent = 'No saved books yet';
+
+                    noResultsMessage.textContent =
+                        'Click the bookmark icon on any book to save it here.';
+                } else {
+                    noResultsTitle.textContent = 'No books found';
+
+                    noResultsMessage.textContent =
+                        'Try another title, author or category.';
+                }
+            }
+
+            if (
+                selectedBook &&
+                (
+                    (
+                        !(selectedBook.dataset.title || '').toLowerCase().includes(searchText) &&
+                        !(selectedBook.dataset.author || '').toLowerCase().includes(searchText)
+                    ) ||
+                    (
+                        selectedCategory !== '' &&
+                        (selectedBook.dataset.category || '').toLowerCase() !== selectedCategory
+                    ) ||
+                    (showSavedOnly && !isBookSaved(selectedBook.dataset.bookId))
+                )
+            ) {
+                showAllBooks();
+            }
+        }
+
+        searchInput.addEventListener('input', function () {
+            if (selectedBook) {
+                showAllBooks();
+            }
+
+            filterBooks();
+        });
+
+        categoryFilter.addEventListener('change', function () {
+            if (selectedBook) {
+                showAllBooks();
+            }
+
+            filterBooks();
+        });
+        if (resetSearch) {
+            resetSearch.addEventListener('click', function () {
+                searchInput.value = '';
+                categoryFilter.value = '';
+                showSavedOnly = false;
+
+                updateSavedInterface();
+                showAllBooks();
+            });
+        }
+
+        updateSavedInterface();
+        filterBooks();
+    </script>
+
+</body>
+</html>
